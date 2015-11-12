@@ -1,0 +1,97 @@
+== README
+
+Todo:
+
+has_many :through
+
+contribution.rb
+class Contribution < ActiveRecord::Base
+  belongs_to :post
+  belongs_to :user
+
+  def accept
+    self.accepted = true
+  end
+end
+
+post.rb
+class Post < ActiveRecord::Base
+  # Who wrote the post. BDD foreign key: author_id
+  belongs_to :author, class_name: 'User'
+
+  # All requests: Contributions for this post with accepted == false
+  has_many :contribution_requests, -> { where(accepted: false) }, class_name: 'Contribution'
+
+  # All accepted contributions: Contributions for this post with accepted == true
+  has_many :contributions, -> { where(accepted: true) }
+
+  # Actual contributors: all users with contributions for this post having accepted as true
+  has_many :contributors, through: :contributions, source: :user
+end
+
+post_test.rb
+require 'test_helper'
+
+class PostTest < ActiveSupport::TestCase
+  test "the truth" do
+    author = User.create
+    contributor = User.create
+
+    post = author.posts.create
+
+    # Create a contribution request
+    request = post.contribution_requests.create(user: contributor)
+
+    # See how associations are OK for the post
+    assert_equal 1, post.contribution_requests.count
+    assert_equal 0, post.contributions.count
+    assert_equal 0, post.contributors.count
+
+    # See how associations are OK for the user
+    assert_equal 1, contributor.contribution_requests.count
+    assert_equal 0, contributor.contributions.count
+    assert_equal 0, contributor.contributed_posts.count
+
+    # Checking if the user requested to be a contributor
+    assert_equal true, contributor.contribution_requests.where(post: post).any?
+
+    # Checking if the user is a contributor for a given post
+    assert_equal false, contributor.contributions.where(post: post).any?
+
+    # Accepting the request
+    request.accept
+    request.save!
+
+    # See how associations are OK for the post
+    assert_equal 0, post.contribution_requests.count
+    assert_equal 1, post.contributions.count
+    assert_equal 1, post.contributors.count
+    assert_equal contributor, post.contributors.first
+
+    # See how associations are OK for the user
+    assert_equal 0, contributor.contribution_requests.count
+    assert_equal 1, contributor.contributions.count
+    assert_equal 1, contributor.contributed_posts.count
+    assert_equal post, contributor.contributed_posts.first
+
+    # Checking the user has no longer a request to be a contributor
+    assert_equal false, contributor.contribution_requests.where(post: post).any?
+
+    # Checking if the user is a contributor
+    assert_equal true, contributor.contributions.where(post: post).any?
+  end
+end
+
+user.rb
+class User < ActiveRecord::Base
+  # All posts written by a user. Inverse of Post#author
+  has_many :posts, foreign_key: 'author_id'
+
+  # All requests to contribute to posts
+  has_many :contribution_requests, -> { where(accepted: false) }, class_name: 'Contribution'
+  # All accepted requests to contribute to posts
+  has_many :contributions, -> { where(accepted: true) }
+
+  # All posts the user can contribute to
+  has_many :contributed_posts, through: :contributions, source: :post
+end

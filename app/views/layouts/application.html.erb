@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fiverr</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+	<header id="main_navigation clearfix" style="padding:1.4em 5%;">
+		<%= link_to "Association", root_path, style: 'text-decoration:none;text-transform:uppercase;font-size:1.5em;'%>
+		<nav style="float:right;">
+			<% if user_signed_in? %>
+			<%= link_to "Home", root_path, style: "text-decoration:none;text-transform:uppercase;" %>
+			<%= link_to "Logout", destroy_user_session_path, method: :delete, style: "text-decoration:none;text-transform:uppercase;margin-left:1em;" %>
+			<% else %>
+			<%= link_to "Signin", new_user_session_path, style: "text-decoration:none;text-transform:uppercase;" %>
+			<%= link_to "Signup", new_user_registration_path, style: "text-decoration:none;text-transform:uppercase;margin-left:1em;" %>
+			<% end  %>
+		</nav>
+	</header>
+
+	<p class="notice"><%= notice %></p>
+	<p class="alert"><%= alert %></p>
+
+
+<%= yield %>
+
+</body>
+</html>

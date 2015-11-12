@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+<div style="text-align:center;">
+  <h1>Listing Projxes</h1>
+
+<% if current_user.try(:admin?) %>
+  <div style="margin:4em 0;">
+    <%= link_to 'New Projx', new_projx_path, style: 'background:#233250;padding:1em;border-radius:3px;color:white;text-decoration:none;' %>
+  </div>
+  <% end %>
+
+      <% @projxes.each do |projx| %>
+<div style="margin:0 auto;">
+  <div style="background:#3C465C;height:130px;width:20%;margin:0 auto;padding:2.5em 1em 1em 1em;margin-bottom:1em;">
+          <%= link_to projx.user.email, user_path(projx.user), style: 'text-decoration:none;color:white;' %><br />
+          <br />
+          <%= link_to projx.title, projx_path(projx), style: 'text-decoration:none;color:white;' %><br />
+          <%= link_to projx.content, projx_path(projx), style: 'text-decoration:none;color:white;'  %>
+          <br />
+          <br />
+          <% if current_user == projx.user %>
+          <%= link_to 'Edit', edit_projx_path(projx), style: 'text-decoration:none;color:#ccc;' %>
+          <%= link_to 'Destroy', projx, method: :delete, data: { confirm: 'Are you sure?' }, style: 'text-decoration:none;color:#ccc;' %>
+          <%= link_to 'Show', projx, style: 'text-decoration:none;color:#ccc;' %>
+          <% else %>
+          <%= link_to 'Show', projx, style: 'text-decoration:none;color:#ccc;' %>
+          <% end %>
+  </div>
+</div>
+      <% end %>
+
+
+  <br>
+</div>
