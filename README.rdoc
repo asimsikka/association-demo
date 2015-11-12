@@ -2,6 +2,8 @@
 
 Demo app: https://fierce-eyrie-5887.herokuapp.com/users/sign_in
 
+Video: https://vid.me/2NfF
+
 Todo:
 
 has_many :through
