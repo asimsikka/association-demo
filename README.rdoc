@@ -3,7 +3,6 @@
 Todo:
 
 has_many :through
-
 contribution.rb
 class Contribution < ActiveRecord::Base
   belongs_to :post
