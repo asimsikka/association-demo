@@ -1,5 +1,7 @@
 == README
 
+Demo app: https://fierce-eyrie-5887.herokuapp.com/users/sign_in
+
 Todo:
 
 has_many :through
