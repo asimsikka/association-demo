@@ -1,11 +1,9 @@
 
 <div style="float:right;clear:left;">
-	<p> Accepted/Verified Post Contributors</p>
-
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+  <p> Accepted/Verified Post Contributors</p>
+  <% @projx.contributors.each do |contributor| %>
+    <img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+  <% end %>
 </div>
 
 <p id="notice"><%= notice %></p>
@@ -30,14 +28,15 @@
 <br />
 <hr />
 
-<p>if current_user =! projxes.user</p>
-
-Before:
-<%=  link_to "Request", '#', style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
-After:
-<%=  link_to "Pending", '#', style: 'background:blue;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
-Accepted contributor:
-<%= link_to "Verified", '#', style: 'background:purple;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+<% if current_user != @projx.user %>
+  <% if @projx.contributors.any?{|cr| cr == current_user} %> 
+    <%= link_to "Verified", '#', style: 'background:purple;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+  <% elsif !@projx.contribution_requests.any?{|cr| cr.user_id == current_user.id} %> 
+    <%=  link_to "Request", contributor_request_projx_path(@projx), style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+  <% else %> 
+    <%=  link_to "Pending", '#', style: 'background:blue;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+  <% end %>
+<% end %>
 <br />
 <br />
 <br />
@@ -45,28 +44,15 @@ Accepted contributor:
 
 <hr />
 
-<p>if current_user == projxes.user</p>
-
-if contributions_request +1:
-<%=  link_to "New requests", '#', style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
-No contributor_request:
+<% if current_user == @projx.user %>
+  <% if @projx.contribution_requests.count > 0 %>
+    <%=  link_to "New requests", requests_projx_path(@projx), style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+  <% elsif @projx.contributions.count > 0 %>
+    <%=  link_to "Requests", requests_projx_path(@projx), style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+  <% else %>  
+    No contribution requests.
+  <% end %>
+<% end %>
 <br />
 <br />
 <br />
-<p>When user clicks on button - render new view page with the following</p>
-
-<div >
-	<p> Accepted/Verified Post Contributors</p>
-
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-	before: accept | after: remove
-	<br />
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-	before: accept | after: remove
-	<br />
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-	before: accept | after: remove
-	<br />
-	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
-</div>
-

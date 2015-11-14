@@ -1,6 +1,6 @@
 class ProjxesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_projx, only: [:show, :edit, :update, :destroy]
+  before_action :set_projx, only: [:show, :edit, :update, :destroy, :contributor_request, :requests, :accept_contributor_request, :remove_contributor]
 
   # GET /projxes
   # GET /projxes.json
@@ -64,6 +64,57 @@ class ProjxesController < ApplicationController
   end
 
   def contributor_request
+    if @projx.contribution_requests.where(:user_id => current_user.id).count < 1
+      contribution_request = @projx.contribution_requests.build
+      contribution_request.user = current_user
+      if contribution_request.save
+        redirect_to :back, notice: 'Contribution request made successfully.'
+      else
+        redirect_to :back, notice: 'There was an error in making your contribution request.'
+      end
+    else
+      redirect_to :back, notice: 'You have already sent a request for this project.'
+    end
+  end
+
+  def accept_contributor_request
+    contribution_request = @projx.contribution_requests.find(params[:request_id])
+    unless contribution_request.nil?
+      contribution_request.accepted = true
+      if contribution_request.save
+        if @projx.contribution_requests.count > 0
+          redirect_to requests_projx_path(@projx), notice: "Contribution request accepted successfully."
+        else
+          redirect_to @projx, notice: "Contribution request accepted successfully."
+        end
+      else
+        redirect_to requests_projx_path(@projx), notice: "There was an error in accepting contribution request."
+      end
+    else
+      redirect_to requests_projx_path(@projx), notice: "Could not find this contribution request."
+    end
+  end
+
+  def remove_contributor
+    contribution = @projx.contributions.find(params[:request_id])
+    unless contribution.nil?
+      if contribution.destroy
+        if @projx.contributions.count > 0
+          redirect_to requests_projx_path(@projx), notice: "Contributor removed successfully."
+        else
+          redirect_to @projx, notice: "Contributor removed successfully."
+        end
+      else
+        redirect_to requests_projx_path(@projx), notice: "There was an error in removing contributor."
+      end
+    else
+      redirect_to requests_projx_path(@projx), notice: "Could not find this user's contribution record."
+    end
+  end
+
+  def requests
+    @contribution_requests = @projx.contribution_requests
+    @contributions = @projx.contributions
   end
 
   private

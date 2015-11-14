@@ -1,0 +1,72 @@
+
+<div style="float:right;clear:left;">
+	<p> Accepted/Verified Post Contributors</p>
+
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+</div>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @projx.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @projx.content %>
+</p>
+
+
+<% if current_user == @projx.user %>
+<%= link_to 'Edit', edit_projx_path(@projx) %> |
+<%= link_to 'Back', projxes_path %>
+<% else %>
+<% end %>
+
+<br />
+<hr />
+
+<p>if current_user =! projxes.user</p>
+
+Before:
+<%=  link_to "Request", '#', style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+After:
+<%=  link_to "Pending", '#', style: 'background:blue;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+Accepted contributor:
+<%= link_to "Verified", '#', style: 'background:purple;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+<br />
+<br />
+<br />
+<br />
+
+<hr />
+
+<p>if current_user == projxes.user</p>
+
+if contributions_request +1:
+<%=  link_to "New requests", '#', style: 'background:#272B28;padding:1em;color:white;border-radius:3px;text-decoration:none;' %>
+No contributor_request:
+<br />
+<br />
+<br />
+<p>When user clicks on button - render new view page with the following</p>
+
+<div >
+	<p> Accepted/Verified Post Contributors</p>
+
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+	before: accept | after: remove
+	<br />
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+	before: accept | after: remove
+	<br />
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+	before: accept | after: remove
+	<br />
+	<img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+</div>
+

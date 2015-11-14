@@ -5,4 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :projxes
+  has_many :contribution_requests, -> { where(accepted: false) }, class_name: 'Contribution'
+  has_many :contributions, -> { where(accepted: true) }
+  has_many :contributed_projxes, through: :contributions, source: :projx
 end

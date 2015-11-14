@@ -1,0 +1,15 @@
+<% if current_user == @projx.user %>
+  <div >
+    <p> Accepted/Verified Post Contributors</p>
+    <% @contribution_requests.each do |request| %>
+      <img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+        <%= link_to "accept", accept_contributor_request_projx_path(@projx, request_id: request.id) %>
+      <br />
+    <% end %>
+    <% @contributions.each do |request| %>
+      <img src="https://d13yacurqjgara.cloudfront.net/users/177698/screenshots/828493/billgates_1x.png" style="height:40px;width:40px;border-radius:100px;">
+        <%= link_to "remove", remove_contributor_projx_path(@projx, request_id: request.id), method: :delete %>
+      <br />
+    <% end %>
+  </div>
+<% end %>
